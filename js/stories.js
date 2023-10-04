@@ -22,9 +22,12 @@ async function getAndShowStoriesOnStart() {
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
+  // fas fa-star  ... solid (fave)
+  // far fa-star  ... hollow (not fave)
+
   const hostName = story.getHostName();
   return $(`
-      <li id="${story.storyId}">
+      <li id="${story.storyId}"><i class="fa-star far hidden"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -47,6 +50,31 @@ function putStoriesOnPage() {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
+  if(currentUser) $(".fa-star").show();
 
   $allStoriesList.show();
 }
+
+/************** new code below here *****************/
+
+
+//add a new story by clicking on submit after filling out the form
+async function addStorySubmitButton(evt){
+  console.debug("addStorySubmitButtong");
+  evt.preventDefault();
+
+  const storyToAdd = {
+    'author': $("#story-author").val(),
+    'title': $("#story-title").val(),
+    'url': $("#story-url").val()
+  }
+
+  $addStoryForm.trigger("reset");
+  await StoryList.addStory(currentUser, storyToAdd);
+  $addStoryForm.hide("slow");
+  await getAndShowStoriesOnStart(); // refresh list...
+
+}
+
+$addStoryForm.on("submit", addStorySubmitButton)
+

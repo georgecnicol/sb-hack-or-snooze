@@ -93,6 +93,7 @@ function saveUserCredentialsInLocalStorage() {
   if (currentUser) {
     localStorage.setItem("token", currentUser.loginToken);
     localStorage.setItem("username", currentUser.username);
+    // localStorage.setItem("favorites", favoritesList);
   }
 }
 
@@ -111,6 +112,96 @@ function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
   $allStoriesList.show();
-
   updateNavOnLogin();
+  updateStoryListWithFaves();
+  $(".fa-star").show();
+  $signupForm.hide();
+  $loginForm.hide();
 }
+
+
+
+/******************* new code below here ********************/
+
+//mark and unmark an existing story as a favorite
+
+async function toggleFavoriteStory(evt){
+  console.debug("toggleFavoriteStory");
+  $(this).toggleClass(['far', 'fas']);
+
+  // the storyId is how we'll add and remove
+  const storyId = evt.target.parentElement.id;
+  let newFaveList = JSON.parse(localStorage.getItem('favoritesList'));
+
+  // not fave, so remove by id
+  if ($(this).hasClass('far')){
+    newFaveList = newFaveList.filter( (story) => {
+      return (story.storyId !== storyId);
+    })
+   //fave, so add to list
+  }else{
+    let faveStory = await Story.getSingleStory(storyId);
+    if (!newFaveList){
+      newFaveList = [];
+    }
+    newFaveList.push(faveStory);
+  }
+  localStorage.setItem('favoritesList', JSON.stringify(newFaveList));
+}
+
+$allStoriesList.on("click", ".fa-star", toggleFavoriteStory);
+
+
+//mark the favorites star when you show the list
+
+function updateStoryListWithFaves() {
+  let faveList = JSON.parse(localStorage.getItem('favoritesList'));
+  if (faveList){
+    for (const story of faveList){
+      $(`#${story.storyId}`)[0].childNodes[0].setAttribute('class', 'fas fa-star');
+    }
+  }
+}
+
+
+// when user clicked on "favorites" in nav bar to see their favorites
+// this is called by event handler in nav.js
+
+function showFavorites(){
+  let faveList = JSON.parse(localStorage.getItem('favoritesList'));
+  hidePageComponents();
+  $allStoriesList.empty();
+
+  if (faveList){
+    for (let story of faveList) {
+      const tempStory = new Story(story);
+      const $story = generateStoryMarkup(tempStory);
+      $allStoriesList.append($story);
+    }
+  }
+  updateStoryListWithFaves();
+  $allStoriesList.show();
+}
+
+// when user clicked on "favorites" in nav bar to see their favorites
+// this is called by event handler in nav.js
+
+function showMyStories(){
+
+  let myStories = storyList.stories.filter((story) =>{
+    return currentUser.username === story.username;
+  });
+
+  hidePageComponents();
+  $allStoriesList.empty();
+
+  if (myStories){
+    for (let story of myStories) {
+      const $story = generateStoryMarkup(story);
+      $allStoriesList.append($story);
+    }
+  }
+  updateStoryListWithFaves();
+  $allStoriesList.show();
+}
+

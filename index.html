@@ -37,6 +37,11 @@
   <div class="navbar-brand">
     <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
   </div>
+  <div class="main-nav-links hidden">
+    <a class="nav-link" href="#" id="nav-submit">submit</a> |
+    <a class="nav-link" href="#" id="nav-favorites">favorites</a> |
+    <a class="nav-link" href="#" id="nav-my-stories">my stories</a>
+  </div>
   <div class="nav-right">
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
     <a class="nav-link" href="#" id="nav-user-profile"></a>
@@ -50,8 +55,27 @@
   <!-- loading message (removed by JS after stories loaded) -->
   <div id="stories-loading-msg">Loading&hellip;</div>
 
-  <!-- List of all stories -->
-  <ol id="all-stories-list" class="stories-list"></ol>
+  <!-- add new story form -->
+  <form id="add-story-form" action="#" class="add-story hidden" method="post">
+    <div class="add-story-div">
+      <label for="story-author">author</label>
+      <input id="story-author" type="text" placeholder="original author of sotry">
+    </div>
+    <div class="add-story-div">
+      <label for="story-title">title</label>
+      <input id="story-title" type="text" placeholder="title of story">
+    </div>
+    <div class="add-story-div">
+      <label for="story-url">url</label>
+      <input id="story-url" type="text" placeholder="https://....">
+    </div>
+    <button type="submit" id="add-story-submit-button">add story</button>
+  </form>
+
+
+    <!-- List of all stories -->
+    <ol id="all-stories-list" class="stories-list"></ol>
+
 
 </section>
 
@@ -69,7 +93,7 @@
       <label for="login-password">password</label>
       <input id="login-password" type="password" autocomplete="current-password">
     </div>
-    <button type="submit">login</button>
+    <button type="submit">Login</button>
     <hr>
   </form>
 

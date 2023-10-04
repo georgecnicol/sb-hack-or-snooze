@@ -21,6 +21,19 @@ class Story {
     this.createdAt = createdAt;
   }
 
+
+  static async getSingleStory(storyId){
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "GET",
+    });
+
+    const storyToReturn = new Story(response.data.story);
+    return storyToReturn;
+  }
+
+
+
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
@@ -66,6 +79,7 @@ class StoryList {
     return new StoryList(stories);
   }
 
+
   /** Adds story data to API, makes a Story instance, adds it to story list.
    * - user - the current instance of User who will post the story
    * - obj of {title, author, url}
@@ -73,9 +87,25 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
-    // UNIMPLEMENTED: complete this function!
+  // requires user to be logged in
+
+  static async addStory(user, newStory) {
+    const storyData = {
+      token : user.loginToken,
+      story : newStory
+    }
+
+    const response = await axios({
+      url: `${BASE_URL}/stories`,
+      method: "POST",
+      data: storyData
+    });
+
+    const {storyId, title, author, url, username, createdAt } = response.data.story
+
+  return (new Story({ storyId, title, author, url, username, createdAt }) );
   }
+
 }
 
 

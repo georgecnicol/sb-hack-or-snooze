@@ -37,3 +37,29 @@
 .story-user {
   display: block;
 }
+
+
+/********** new code below here ***********/
+
+.add-story {
+  padding-left: 20px;
+}
+
+
+.add-story button {
+  width: 6rem;
+  margin-left: 80px;
+}
+
+.fa-star.far:hover{
+  color: #ff6600;
+  cursor: pointer;
+}
+
+.fa-star.fas {
+}
+
+.fa-star.fas:hover{
+  color: #ff6600;
+  cursor: pointer;
+}

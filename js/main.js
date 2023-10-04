@@ -7,9 +7,14 @@ const $body = $("body");
 const $storiesLoadingMsg = $("#stories-loading-msg");
 const $allStoriesList = $("#all-stories-list");
 
+
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
+const $addStoryForm = $("#add-story-form");
 
+const $navMyStories = $("#nav-my-stories");
+const $navFavorites = $("#nav-favorites");
+const $navSubmit = $("#nav-submit");
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
@@ -24,6 +29,7 @@ function hidePageComponents() {
     $allStoriesList,
     $loginForm,
     $signupForm,
+    $addStoryForm
   ];
   components.forEach(c => c.hide());
 }
@@ -39,7 +45,9 @@ async function start() {
 
   // if we got a logged-in user
   if (currentUser) updateUIOnUserLogin();
+
 }
+
 
 // Once the DOM is entirely loaded, begin the app
 
