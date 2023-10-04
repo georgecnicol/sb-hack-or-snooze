@@ -114,7 +114,6 @@ function updateUIOnUserLogin() {
   $allStoriesList.show();
   updateNavOnLogin();
   updateStoryListWithFaves();
-  $(".fa-star").show();
   $signupForm.hide();
   $loginForm.hide();
 }
@@ -158,9 +157,12 @@ function updateStoryListWithFaves() {
   let faveList = JSON.parse(localStorage.getItem('favoritesList'));
   if (faveList){
     for (const story of faveList){
-      $(`#${story.storyId}`)[0].childNodes[0].setAttribute('class', 'fas fa-star');
+      if($(`#${story.storyId}`).length !== 0){ // example of zero: fave stories that aren't your own on my stories
+        $(`#${story.storyId}`)[0].childNodes[faveStarNode].setAttribute('class', 'fas fa-star');
+      }
     }
   }
+  showStars();
 }
 
 
@@ -202,6 +204,17 @@ function showMyStories(){
     }
   }
   updateStoryListWithFaves();
+  showTrash();
   $allStoriesList.show();
 }
 
+
+async function trashCanClicked(evt){
+  console.debug("trashCanClicked");
+  const idToDelete = evt.target.parentElement.id;
+  await StoryList.discardStory(currentUser, idToDelete);
+  evt.target.parentElement.remove();
+  storyList.stories = storyList.stories.filter(story => idToDelete !== story.storyId);
+}
+
+$allStoriesList.on("click", ".fa-trash-alt", trashCanClicked);

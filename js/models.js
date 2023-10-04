@@ -27,7 +27,7 @@ class Story {
       url: `${BASE_URL}/stories/${storyId}`,
       method: "GET",
     });
-
+    checkResponse(response.status);
     const storyToReturn = new Story(response.data.story);
     return storyToReturn;
   }
@@ -67,11 +67,12 @@ class StoryList {
     //  instance method?
 
     // query the /stories endpoint (no auth required)
+
     const response = await axios({
       url: `${BASE_URL}/stories`,
       method: "GET",
     });
-
+    checkResponse(response.status);
     // turn plain old story objects from API into instances of Story class
     const stories = response.data.stories.map(story => new Story(story));
 
@@ -101,10 +102,28 @@ class StoryList {
       data: storyData
     });
 
+    checkResponse(response.status);
     const {storyId, title, author, url, username, createdAt } = response.data.story
 
   return (new Story({ storyId, title, author, url, username, createdAt }) );
   }
+
+  //discard story via the trash can icon
+
+  static async discardStory(user, storyId) {
+    const userData = {
+      token : user.loginToken,
+    }
+
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "DELETE",
+      data: userData
+    });
+
+    checkResponse(response.status);
+  }
+
 
 }
 
@@ -152,7 +171,7 @@ class User {
       method: "POST",
       data: { user: { username, password, name } },
     });
-
+    checkResponse(response.status);
     let { user } = response.data
 
     return new User(
@@ -178,10 +197,14 @@ class User {
       url: `${BASE_URL}/login`,
       method: "POST",
       data: { user: { username, password } },
+    }).catch(function (error) {
+      if (error.response) {
+        alert('username or password incorrect');
+      }
     });
 
     let { user } = response.data;
-
+    checkResponse(response.status);
     return new User(
       {
         username: user.username,
@@ -207,7 +230,7 @@ class User {
       });
 
       let { user } = response.data;
-
+      checkResponse(response.status);
       return new User(
         {
           username: user.username,

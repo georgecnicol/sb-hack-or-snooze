@@ -1,6 +1,7 @@
 "use strict";
 
 // This is the global list of the stories, an instance of StoryList
+//initialize to length of zero for infinite scroll
 let storyList;
 
 /** Get and show stories when site first loads. */
@@ -8,7 +9,6 @@ let storyList;
 async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
   $storiesLoadingMsg.remove();
-
   putStoriesOnPage();
 }
 
@@ -17,6 +17,10 @@ async function getAndShowStoriesOnStart() {
  * - story: an instance of Story
  *
  * Returns the markup for the story.
+ *
+ * IMPORTANT if you fiddle with the markup you should
+ * check the const on main.js to ensure your
+ * trashcan and faveStar icons are aligned as child nodes in
  */
 
 function generateStoryMarkup(story) {
@@ -27,13 +31,15 @@ function generateStoryMarkup(story) {
 
   const hostName = story.getHostName();
   return $(`
-      <li id="${story.storyId}"><i class="fa-star far hidden"></i>
+      <li id="${story.storyId}">
+      <i class="fas fa-trash-alt hidden"></i>
+      <i class="fa-star far hidden"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
-        <small class="story-hostname">(${hostName})</small>
-        <small class="story-author">by ${story.author}</small>
-        <small class="story-user">posted by ${story.username}</small>
+        <small class="story-hostname">(${hostName})</small><br>
+        <span class="story-author">by ${story.author}</span><br>
+        <span class="story-user">posted by ${story.username}</span>
       </li>
     `);
 }
@@ -50,9 +56,9 @@ function putStoriesOnPage() {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
-  if(currentUser) $(".fa-star").show();
-
+  updateStoryListWithFaves();
   $allStoriesList.show();
+
 }
 
 /************** new code below here *****************/
@@ -77,4 +83,8 @@ async function addStorySubmitButton(evt){
 }
 
 $addStoryForm.on("submit", addStorySubmitButton)
+
+
+
+
 

@@ -31,10 +31,11 @@
 }
 
 .story-author {
-  margin-left: 2em;
+  color: green;
 }
 
 .story-user {
+  color: orange;
   display: block;
 }
 
@@ -44,7 +45,6 @@
 .add-story {
   padding-left: 20px;
 }
-
 
 .add-story button {
   width: 6rem;

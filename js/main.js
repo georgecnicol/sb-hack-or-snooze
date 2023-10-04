@@ -19,6 +19,11 @@ const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
 
+/* if you fiddle with generateStoryMarkup in stories js
+* you may need to adjust these */
+const trashCanNode = 1;
+const faveStarNode = 3;
+
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
  * calling this, individual components can re-show just what they want.
@@ -46,6 +51,19 @@ async function start() {
   // if we got a logged-in user
   if (currentUser) updateUIOnUserLogin();
 
+}
+
+
+function showStars(){
+  if (currentUser) $(".fa-star").show();
+}
+
+function showTrash(){
+  if (currentUser) $(".fa-trash-alt").show();
+}
+
+function checkResponse(code){
+  if (code !== 200) console.debug("api call failed");
 }
 
 

@@ -12,7 +12,6 @@ function navAllStories(evt) {
   putStoriesOnPage();
   if(currentUser){
     updateStoryListWithFaves();
-    $(".fa-star").show();
   }
 }
 
@@ -45,11 +44,7 @@ function updateNavOnLogin() {
 
 function navSubmitClick(evt) {
   console.debug("navSubmitClick");
-  if (currentUser){
     $addStoryForm.show();
-  }else{
-    promptLogin();
-  }
 }
 
 $navSubmit.on("click", navSubmitClick);
@@ -59,12 +54,7 @@ $navSubmit.on("click", navSubmitClick);
 
 function navFavoritesClick(evt) {
   console.debug("navFavoritesClick");
-  if (currentUser){
     showFavorites();
-    $(".fa-star").show();
-  }else{
-    promptLogin();
-  }
 }
 
 $navFavorites.on("click", navFavoritesClick);
@@ -74,12 +64,7 @@ $navFavorites.on("click", navFavoritesClick);
 
 function navMyStoriesClick(evt) {
   console.debug("navMyStoriesClick");
-  if (currentUser){
     showMyStories();
-    $(".fa-star").show();
-  }else{
-    promptLogin();
-  }
 }
 
 $navMyStories.on("click", navMyStoriesClick);
